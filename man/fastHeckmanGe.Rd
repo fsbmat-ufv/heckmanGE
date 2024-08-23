@@ -53,6 +53,5 @@ selectEq  <- dambexp ~ age + female + educ + blhisp + totchr + ins + income
 outcomeEq <- lnambx ~ age + female + educ + blhisp + totchr + ins
 dispersion  <- ~ age + female + totchr + ins
 correlation  <- ~ age
-system.time({fit.fast = fastHeckmanGe(selectEq, outcomeEq, dispersion, correlation, data = MEPS2001)})
 
 }
