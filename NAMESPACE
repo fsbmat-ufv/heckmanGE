@@ -3,3 +3,4 @@
 export(fastHeckmanGe)
 export(fitfastHeckmanGe)
 export(step2)
+export(vcovCL.fastHeckmanGe)
