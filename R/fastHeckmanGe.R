@@ -132,7 +132,7 @@ fastHeckmanGe <- function(selection, outcome, dispersion, correlation,
         # Guessing starting values ---------------------------------------------
 
         if (is.null(start)){
-                start_guess <- fastHeckmanGe:::step2(YS     = YS,
+                start_guess <- step2(YS     = YS,
                                                      XS     = XS,
                                                      YO     = YO,
                                                      XO     = XO,
@@ -186,7 +186,7 @@ fastHeckmanGe <- function(selection, outcome, dispersion, correlation,
 
                 mf_cluster <- eval(mf_cluster, parent.frame())
 
-                vcov_clustered <- fastHeckmanGe:::vcovCL.fastHeckmanGe(result, cluster = mf_cluster)
+                vcov_clustered <- vcovCL.fastHeckmanGe(result, cluster = mf_cluster)
                 se_clustered   = sqrt(diag(vcov_clustered))
 
                 result$vcov         = vcov_clustered

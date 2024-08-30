@@ -41,7 +41,7 @@ step2 <- function(YS, XS, YO, XO, Msigma, Mrho, w) {
         guess_coef_correlation <- c(guess_coef_correlation, rep(0, ncol(Mrho) - 1))
         names(guess_coef_correlation) <- colnames(Mrho)
 
-        #Chute inicial para optim do modelo BS
+        #Chute inicial para optim do modelo
         beta <- list(selection   = guess_coef_selection,
                      outcome     = guess_coefs_outcome,
                      dispersion  = guess_coef_dispersion,
