@@ -1,12 +1,11 @@
 Package: heckmange
-Title: What the Package Does (One Line, Title Case)
+Title: Estimation and Inference for Heckman Selection Models with Cluster-Robust Variance
 Version: 0.0.0.9000
 Authors@R: 
     person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Description: The `heckmange` package provides tools for the estimation of Heckman selection models with robust variance-covariance matrices. It includes functions for computing the bread and meat matrices, as well as clustered standard errors for generalized Heckman models. The package also offers cluster-robust inference with sandwich estimators, and tools for handling issues related to eigenvalues in covariance matrices.
+License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2

@@ -1,4 +1,20 @@
-#' step2
+#' step2: Two-Step Estimation Function
+#'
+#' This function performs a two-step estimation process, commonly used in models that require correction for sample selection bias. It estimates parameters for selection, outcome, and dispersion equations.
+#'
+#' @param YS A binary vector indicating selection (1 if selected, 0 otherwise).
+#' @param XS A matrix of covariates for the selection equation.
+#' @param YO A vector of observed outcomes for the selected sample.
+#' @param XO A matrix of covariates for the outcome equation.
+#' @param Msigma A matrix of covariates for the dispersion equation.
+#' @param Mrho A matrix of covariates for the correlation structure.
+#' @param w A vector of weights to be used in the estimation process.
+#'
+#' @return A list containing the estimated coefficients for the selection, outcome, dispersion, and correlation equations.
+#'
+#' @details
+#' The function first estimates the selection equation using a probit model. The inverse Mills ratio (IMR) is calculated and included as an additional covariate in the outcome and dispersion equations. The outcome equation is estimated using weighted least squares, and the residuals are used to estimate the dispersion equation. Initial guesses for the correlation structure are also provided.
+#'
 #'
 #' @export
 step2 <- function(YS, XS, YO, XO, Msigma, Mrho, w) {

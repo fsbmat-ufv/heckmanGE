@@ -1,8 +1,32 @@
 #' fitfastHeckmanGe
 #'
-#' Optimized Function for fitting the Generalized Heckman Model
+#' Optimized Function for Fitting the Generalized Heckman Model
 #'
-#' (original version: package ssmodels. Modified by Rogerio Barbosa)
+#' This function estimates the parameters of a generalized Heckman selection model using a Newton-Raphson optimization algorithm. It supports the modeling of selection and outcome equations, along with associated dispersion and correlation structures.
+#'
+#' @param start A numeric vector with initial parameter values for the model.
+#' @param YS A binary vector indicating the selection equation outcomes (1 for selected, 0 for not selected).
+#' @param XS A matrix of predictors for the selection equation.
+#' @param YO A vector of observed outcomes for the outcome equation.
+#' @param XO A matrix of predictors for the outcome equation.
+#' @param Msigma A matrix related to the dispersion parameter.
+#' @param Mrho A matrix related to the correlation parameter.
+#' @param w A numeric vector of weights for the observations.
+#'
+#' @return A list containing:
+#' \describe{
+#'   \item{coefficients}{Estimated coefficients for the selection, outcome, dispersion, and correlation equations.}
+#'   \item{fitted.values}{Fitted values for the selection, outcome, dispersion, and correlation equations.}
+#'   \item{residuals}{Residuals for the selection and outcome equations.}
+#'   \item{loglik}{The log-likelihood of the fitted model.}
+#'   \item{vcov}{The variance-covariance matrix of the estimated parameters.}
+#'   \item{aic}{The Akaike Information Criterion (AIC) for the model.}
+#'   \item{bic}{The Bayesian Information Criterion (BIC) for the model.}
+#'   \item{optimization}{Details of the optimization process, including the convergence status.}
+#' }
+#'
+#' @details
+#' The function optimizes the log-likelihood of a generalized Heckman selection model using a Newton-Raphson algorithm. The model allows for estimation of selection bias in the outcome equation, and incorporates additional parameters for dispersion and correlation.
 #'
 #' @export
 fitfastHeckmanGe = function(start,

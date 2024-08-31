@@ -2,7 +2,7 @@
 % Please edit documentation in R/vcovCL.fastHeckmanGe.R
 \name{vcovCL.fastHeckmanGe}
 \alias{vcovCL.fastHeckmanGe}
-\title{vcovCL.fastHeckmanGe}
+\title{Variância-Covariância com Correção por Agrupamento para Modelos Heckman}
 \usage{
 vcovCL.fastHeckmanGe(
   x,
@@ -13,6 +13,37 @@ vcovCL.fastHeckmanGe(
   ...
 )
 }
+\arguments{
+\item{x}{Um objeto resultante da estimativa de um modelo Heckman usando o método \code{fastHeckmanGe}.}
+
+\item{cluster}{Um vetor ou fator que identifica os agrupamentos (clusters) nos dados. Se NULL, assume
+que não há agrupamento.}
+
+\item{type}{Um caractere que especifica o tipo de correção por agrupamento a ser utilizada. Pode ser
+\code{"HC0"}, \code{"HC1"}, \code{"HC2"}, ou \code{"HC3"}.}
+
+\item{sandwich}{Um valor lógico. Se TRUE, a função aplica a estimativa sandwich à matriz de
+variância-covariância.}
+
+\item{fix}{Um valor lógico. Se TRUE, corrige eventuais valores negativos nos autovalores da matriz
+de variância-covariância.}
+
+\item{...}{Argumentos adicionais que podem ser passados para métodos internos.}
+}
+\value{
+Uma matriz de variância-covariância corrigida.
+}
 \description{
-vcovCL.fastHeckmanGe
+A função \code{vcovCL.fastHeckmanGe} calcula a matriz de variância-covariância de um modelo Heckman,
+aplicando uma correção por agrupamento (cluster). Isso é útil para obter estimativas robustas da
+variância, especialmente quando há dependência dentro dos grupos.
+}
+\details{
+Esta função é uma implementação especializada para a obtenção de uma matriz de
+variância-covariância robusta a partir de modelos Heckman estimados com \code{fastHeckmanGe}. Ela permite
+a aplicação de correção por agrupamento, o que é especialmente importante em contextos onde
+observações dentro de grupos podem não ser independentes.
+}
+\seealso{
+\code{\link[=meatCL.fastHeckmanGe]{meatCL.fastHeckmanGe()}}, \code{\link[=sandwich.fastHeckmanGe]{sandwich.fastHeckmanGe()}}, \code{\link[=bread.fastHeckmanGe]{bread.fastHeckmanGe()}}
 }
