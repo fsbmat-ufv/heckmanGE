@@ -15,6 +15,7 @@
 #' @details
 #' The function first estimates the selection equation using a probit model. The inverse Mills ratio (IMR) is calculated and included as an additional covariate in the outcome and dispersion equations. The outcome equation is estimated using weighted least squares, and the residuals are used to estimate the dispersion equation. Initial guesses for the correlation structure are also provided.
 #'
+#' @importFrom stats glm.fit dnorm pnorm
 #'
 #' @export
 step2 <- function(YS, XS, YO, XO, Msigma, Mrho, w) {
@@ -30,7 +31,7 @@ step2 <- function(YS, XS, YO, XO, Msigma, Mrho, w) {
         guess_coef_selection = coef(fit1)
 
         # Outcome Equation
-        fit2 <- .Call(stats:::C_Cdqrls, xMat[YS == 1, ] * sqrt(w1), YO[YS == 1] * sqrt(w1), 1e-08, FALSE)
+        fit2 <- .Call(C_Cdqrls, xMat[YS == 1, ] * sqrt(w1), YO[YS == 1] * sqrt(w1), 1e-08, FALSE)
         fit2$residuals = fit2$residuals/sqrt(w1)
         fit2$fitted.values = YO[YS == 1] - fit2$residuals
         names(fit2$coefficients) = colnames(xMat)
@@ -40,7 +41,7 @@ step2 <- function(YS, XS, YO, XO, Msigma, Mrho, w) {
         # Dispersion equation
         sd_hat = sqrt( (fit2$residuals)^2 )
         Msigma_IMR <- cbind(Msigma, IMR)
-        fit3 <- .Call(stats:::C_Cdqrls, Msigma_IMR[YS == 1, ] * sqrt(w1), log(sd_hat) * sqrt(w1), 1e-08, FALSE)
+        fit3 <- .Call(C_Cdqrls, Msigma_IMR[YS == 1, ] * sqrt(w1), log(sd_hat) * sqrt(w1), 1e-08, FALSE)
         names(fit3$coefficients) = colnames(Msigma_IMR)
         guess_coef_dispersion = coef(fit3)[!names(coef(fit3)) %in% "IMR"]
 

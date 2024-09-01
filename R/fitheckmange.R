@@ -1,4 +1,4 @@
-#' fitfastHeckmanGe
+#' fitheckmange
 #'
 #' Optimized Function for Fitting the Generalized Heckman Model
 #'
@@ -28,8 +28,9 @@
 #' @details
 #' The function optimizes the log-likelihood of a generalized Heckman selection model using a Newton-Raphson algorithm. The model allows for estimation of selection bias in the outcome equation, and incorporates additional parameters for dispersion and correlation.
 #'
+#' @importFrom maxLik maxNR
 #' @export
-fitfastHeckmanGe = function(start,
+fitheckmange = function(start,
                             YS,
                             XS,
                             YO,
@@ -342,8 +343,8 @@ fitfastHeckmanGe = function(start,
 
 
         result = structure(.Data = result,
-                           class = "fitfastHeckmanGe")
-        #class(result) <- "fastHeckmanGe"
+                           class = "fitheckmange")
+        #class(result) <- "heckmange"
 
         result
 }
