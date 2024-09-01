@@ -1,4 +1,4 @@
-#' heckmange
+#' heckmanGE
 #'
 #' Optimized Function for fitting the Generalized Heckman Model
 #'
@@ -8,7 +8,7 @@
 #' Estimates the parameters of the Generalized Heckman model
 #'
 #' @details
-#' The heckmange() function fits a generalization of the Heckman sample
+#' The heckmanGE() function fits a generalization of the Heckman sample
 #' selection model, allowing sample selection bias and dispersion parameters
 #' to depend on covariates.
 #'
@@ -33,7 +33,7 @@
 #'correlation  <- ~ age
 #' @importFrom stats complete.cases model.matrix model.response
 #' @export
-heckmange <- function(selection, outcome, dispersion, correlation,
+heckmanGE <- function(selection, outcome, dispersion, correlation,
                       data = sys.frame(sys.parent()),
                       weights = NULL,
                       cluster = NULL,
@@ -151,7 +151,7 @@ heckmange <- function(selection, outcome, dispersion, correlation,
 
   # fit model ------------------------------------------------------------
 
-  result = fitheckmange(start  =  start,
+  result = fitheckmanGE(start  =  start,
                         YS     =  YS,
                         XS     =  XS,
                         YO     =  YO,
@@ -171,7 +171,7 @@ heckmange <- function(selection, outcome, dispersion, correlation,
                                       model.frame.dispersion     = mfD,
                                       model.frame.correlation    = mfC)))
 
-  class(result) <- "heckmange"
+  class(result) <- "heckmanGE"
 
 
   # clustered errors -----------------------------------------------------
@@ -186,7 +186,7 @@ heckmange <- function(selection, outcome, dispersion, correlation,
 
     mf_cluster <- eval(mf_cluster, parent.frame())
 
-    vcov_clustered <- vcovCL.heckmange(result, cluster = mf_cluster)
+    vcov_clustered <- vcovCL.heckmanGE(result, cluster = mf_cluster)
     se_clustered   = sqrt(diag(vcov_clustered))
 
     result$vcov         = vcov_clustered
@@ -207,15 +207,15 @@ heckmange <- function(selection, outcome, dispersion, correlation,
 #correlation  <- ~ age + totchr
 #start = NULL
 #
-#heckmange <- function(selection, outcome, dispersion, correlation, data, weights, cluster, start = NULL) {
+#heckmanGE <- function(selection, outcome, dispersion, correlation, data, weights, cluster, start = NULL) {
 #
 #        ##############################################################################
 #        mf <- match.call(expand.dots = FALSE)
 #        mf
 #}
 #
-#mf = heckmange(selectEq, outcomeEq, dispersion, correlation, cluster = subject.id, data = MEPS2001)
-#object = heckmange(selection = selectEq,
+#mf = heckmanGE(selectEq, outcomeEq, dispersion, correlation, cluster = subject.id, data = MEPS2001)
+#object = heckmanGE(selection = selectEq,
 #              outcome   = outcomeEq,
 #              dispersion  = dispersion,
 #              correlation  = correlation,

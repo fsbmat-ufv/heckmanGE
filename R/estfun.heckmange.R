@@ -3,7 +3,7 @@
 #' This function calculates the estimating functions (gradient of the log-likelihood) for the Generalized Heckman model.
 #' It is used for model diagnostics and for obtaining the estimating functions required for inference.
 #'
-#' @param x An object of class `heckmange`, which contains the fitted model, including model responses, model matrices, weights, and coefficient indexes.
+#' @param x An object of class `heckmanGE`, which contains the fitted model, including model responses, model matrices, weights, and coefficient indexes.
 #' @param ... Additional arguments (currently not used).
 #'
 #' @details
@@ -15,7 +15,7 @@
 #' @return A matrix of the same dimensions as the number of observations by the number of parameters in the model, where each element represents the gradient of the log-likelihood function with respect to the parameters.
 #'
 #' @export
-estfun.heckmange <- function(x, ...){
+estfun.heckmanGE <- function(x, ...){
 
         YS = x$model.responses$selection
         YO = x$model.responses$outcome

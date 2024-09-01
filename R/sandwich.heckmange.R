@@ -1,18 +1,18 @@
-#' sandwich.heckmange
+#' sandwich.heckmanGE
 #' Sandwich Estimator for Generalized Heckman Model
 #'
-#' Computes the sandwich estimator of the variance-covariance matrix for the `heckmange` model.
+#' Computes the sandwich estimator of the variance-covariance matrix for the `heckmanGE` model.
 #'
-#' @param x An object of class `heckmange` representing a fitted Generalized Heckman model.
-#' @param bread. A function to compute the "bread" part of the sandwich estimator. Defaults to `bread.heckmange`.
-#' @param meat. A function to compute the "meat" part of the sandwich estimator. Defaults to `meat.heckmange`.
+#' @param x An object of class `heckmanGE` representing a fitted Generalized Heckman model.
+#' @param bread. A function to compute the "bread" part of the sandwich estimator. Defaults to `bread.heckmanGE`.
+#' @param meat. A function to compute the "meat" part of the sandwich estimator. Defaults to `meat.heckmanGE`.
 #' @param ... Additional arguments passed to `meat.`.
 #' @return
-#' A variance-covariance matrix for the `heckmange` model, computed using the sandwich estimator.
+#' A variance-covariance matrix for the `heckmanGE` model, computed using the sandwich estimator.
 #' @export
-sandwich.heckmange = function (x,
-                                   bread. = bread.heckmange,
-                                   meat.  = meat.heckmange,
+sandwich.heckmanGE = function (x,
+                                   bread. = bread.heckmanGE,
+                                   meat.  = meat.heckmanGE,
                                    ...){
 
         if (is.list(x) && !is.null(x$na.action))
@@ -24,6 +24,6 @@ sandwich.heckmange = function (x,
         if (is.function(meat.))
                 meat. <- meat.(x, ...)
 
-        n <- NROW(estfun.heckmange(x))
+        n <- NROW(estfun.heckmanGE(x))
         return(1/n * (bread. %*% meat. %*% bread.))
 }

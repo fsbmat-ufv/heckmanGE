@@ -1,16 +1,16 @@
-#' print.heckmange
+#' print.heckmanGE
 #' Print of Generalized Heckman Model Results
 #'
-#' Prints a summary of the results from a fitted `heckmange` model, including estimates for different model components, log-likelihood, AIC, BIC, and other relevant statistics.
+#' Prints a summary of the results from a fitted `heckmanGE` model, including estimates for different model components, log-likelihood, AIC, BIC, and other relevant statistics.
 #'
-#' @param x An x of class `heckmange`. This x should be a fitted model whose results are to be printed.
+#' @param x An x of class `heckmanGE`. This x should be a fitted model whose results are to be printed.
 #' @param ... Additional arguments passed to or from other methods.
 #' @return
 #' Prints the estimates and statistics of the Generalized Heckman model to the console.
 #' @importFrom stats coef logLik
 #' @importFrom utils capture.output
 #' @export
-print.heckmange  <- function(x, ... ){
+print.heckmanGE  <- function(x, ... ){
 
         indexes       <- x$coefficients_indexes
         coefficients  <- x$coefficients
@@ -24,7 +24,7 @@ print.heckmange  <- function(x, ... ){
         nParam        <- x$nParam
         df            <- x$df
 
-        cat("Generalized Heckman Model (Package: heckmange)\n")
+        cat("Generalized Heckman Model (Package: heckmanGE)\n")
         cat("\n")
         cat("Call:\n")
         print(x$call)

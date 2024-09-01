@@ -1,4 +1,4 @@
-#' fitheckmange
+#' fitheckmanGE
 #'
 #' Optimized Function for Fitting the Generalized Heckman Model
 #'
@@ -30,7 +30,7 @@
 #'
 #' @importFrom maxLik maxNR
 #' @export
-fitheckmange = function(start,
+fitheckmanGE = function(start,
                             YS,
                             XS,
                             YO,
@@ -343,8 +343,8 @@ fitheckmange = function(start,
 
 
         result = structure(.Data = result,
-                           class = "fitheckmange")
-        #class(result) <- "heckmange"
+                           class = "fitheckmanGE")
+        #class(result) <- "heckmanGE"
 
         result
 }

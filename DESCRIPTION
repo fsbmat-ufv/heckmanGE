@@ -1,4 +1,4 @@
-Package: heckmange
+Package: heckmanGE
 Title: Estimation and Inference for Heckman Selection Models with Cluster-Robust Variance
 Version: 0.0.0.9000
 Authors@R: 
@@ -10,13 +10,13 @@ Authors@R:
       person("Prates", "Marcos Oliveira", , "marcosop@est.ufmg.br", role = "aut",
              comment = c(ORCID = "0000-0001-8077-4898"))
     )
-Description: The `heckmange` package provides tools for the estimation of Heckman selection models with robust variance-covariance matrices. It includes functions for computing the bread and meat matrices, as well as clustered standard errors for generalized Heckman models. The package also offers cluster-robust inference with sandwich estimators, and tools for handling issues related to eigenvalues in covariance matrices.
+Description: The `heckmanGE` package provides tools for the estimation of Heckman selection models with robust variance-covariance matrices. It includes functions for computing the bread and meat matrices, as well as clustered standard errors for generalized Heckman models. The package also offers cluster-robust inference with sandwich estimators, and tools for handling issues related to eigenvalues in covariance matrices.
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-URL: https://github.com/fsbmat-ufv/heckmange
-BugReports: https://github.com/fsbmat-ufv/heckmange/issues
+URL: https://github.com/fsbmat-ufv/heckmanGE
+BugReports: https://github.com/fsbmat-ufv/heckmanGE/issues
 Depends: 
     R (>= 2.10), 
     maxLik,

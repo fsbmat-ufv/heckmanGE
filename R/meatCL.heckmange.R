@@ -1,9 +1,9 @@
-#' meatCL.heckmange
+#' meatCL.heckmanGE
 #' Compute the Meat Matrix for a Heckman-Ge Model with Clustering
 #'
 #' This function calculates the meat matrix for a Heckman-Ge model, which is used in the context of clustered standard errors. The meat matrix represents the variability of the estimated parameters and is a crucial component for robust inference.
 #'
-#' @param x An object of class `heckmange` containing the results from a Heckman-Ge model fit.
+#' @param x An object of class `heckmanGE` containing the results from a Heckman-Ge model fit.
 #' @param cluster A vector or a data frame specifying the cluster variable(s). If `NULL`, the default clustering variable is used.
 #' @param type The type of heteroscedasticity-consistent (HC) estimator to use. Options are "HC0", "HC1", "HC2", or "HC3". Defaults to "HC0".
 #' @param cadjust A logical value indicating whether to adjust for the number of clusters. Defaults to `TRUE`.
@@ -15,11 +15,11 @@
 #' @importFrom stats expand.model.frame model.matrix model.response model.weights na.pass hatvalues weights coef binomial pnorm dnorm glm.fit
 #' @importFrom utils tail combn
 #' @export
-meatCL.heckmange = function(x, cluster = NULL, type = NULL, cadjust = TRUE, multi0 = FALSE, ...) {
+meatCL.heckmanGE = function(x, cluster = NULL, type = NULL, cadjust = TRUE, multi0 = FALSE, ...) {
 
         if (is.list(x) && !is.null(x$na.action))
                 class(x$na.action) <- "omit"
-        ef <- estfun.heckmange(x, ...)
+        ef <- estfun.heckmanGE(x, ...)
         k <- NCOL(ef)
         n <- NROW(ef)
         rval <- matrix(0, nrow = k, ncol = k, dimnames = list(colnames(ef),
@@ -152,4 +152,33 @@ meatCL.heckmange = function(x, cluster = NULL, type = NULL, cadjust = TRUE, mult
         if (type == "HC1")
                 rval <- (n - 1L)/(n - k) * rval
         return(rval)
+}
+
+## matrix power (for square root and inverse square root)
+matrixpower <- function(X, p, symmetric = NULL, tol = .Machine$double.eps^(1/1.3)) {
+  if((ncol(X) == 1L) && (nrow(X) == 1L)) return(X^p)
+  if(is.null(symmetric)) symmetric <- isSymmetric(X)
+  Xeig <- eigen(X, symmetric = symmetric)
+  if(is.complex(Xeig$values)) {
+    if(any(abs(Im(Xeig$values)) > tol)) warning("complex eigen values of X")
+    Xeig$values <- Re(Xeig$values)
+    Xeig$vectors <- Re(Xeig$vectors)
+  }
+  Xeig$values[Xeig$values < tol] <- 0
+  # if(any(Xeig$values < 0)) stop("matrix is not positive semidefinite")
+  if(symmetric) {
+    Xeig$vectors %*% ((Xeig$values^p) * t(Xeig$vectors))
+  } else {
+    Xeig$vectors %*% ((Xeig$values^p) * matrixinverse(Xeig$vectors))
+  }
+}
+
+matrixinverse <- function(X, tol = .Machine$double.eps^(1/1.3)) {
+  if((ncol(X) == 1L) && (nrow(X) == 1L)) return(1/X)
+  inv <- try(solve(X), silent = TRUE)
+  if(!inherits(inv, "try-error")) return(inv)
+  Xsvd <- svd(X)
+  ok <- Xsvd$d > max(tol * Xsvd$d[1L], 0)
+  inv <- Xsvd$v[, ok, drop = FALSE] %*% ((1/Xsvd$d[ok]) * t(Xsvd$u[, ok, drop = FALSE]))
+  return(inv)
 }

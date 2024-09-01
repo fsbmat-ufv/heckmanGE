@@ -1,10 +1,10 @@
 #' Variância-Covariância com Correção por Agrupamento para Modelos Heckman
 #'
-#' A função `vcovCL.heckmange` calcula a matriz de variância-covariância de um modelo Heckman,
+#' A função `vcovCL.heckmanGE` calcula a matriz de variância-covariância de um modelo Heckman,
 #' aplicando uma correção por agrupamento (cluster). Isso é útil para obter estimativas robustas da
 #' variância, especialmente quando há dependência dentro dos grupos.
 #'
-#' @param x Um objeto resultante da estimativa de um modelo Heckman usando o método `heckmange`.
+#' @param x Um objeto resultante da estimativa de um modelo Heckman usando o método `heckmanGE`.
 #' @param cluster Um vetor ou fator que identifica os agrupamentos (clusters) nos dados. Se NULL, assume
 #' que não há agrupamento.
 #' @param type Um caractere que especifica o tipo de correção por agrupamento a ser utilizada. Pode ser
@@ -16,26 +16,26 @@
 #' @param ... Argumentos adicionais que podem ser passados para métodos internos.
 #'
 #' @details Esta função é uma implementação especializada para a obtenção de uma matriz de
-#' variância-covariância robusta a partir de modelos Heckman estimados com `heckmange`. Ela permite
+#' variância-covariância robusta a partir de modelos Heckman estimados com `heckmanGE`. Ela permite
 #' a aplicação de correção por agrupamento, o que é especialmente importante em contextos onde
 #' observações dentro de grupos podem não ser independentes.
 #'
 #' @return Uma matriz de variância-covariância corrigida.
 #'
-#' @seealso [meatCL.heckmange()], [sandwich.heckmange()], [bread.heckmange()]
+#' @seealso [meatCL.heckmanGE()], [sandwich.heckmanGE()], [bread.heckmanGE()]
 #'
 #' @importFrom stats complete.cases pnorm dnorm binomial coef glm.fit model.matrix model.response model.weights na.pass terms
 #' @importFrom utils tail
 #' @export
-vcovCL.heckmange = function (x, cluster = NULL, type = NULL, sandwich = TRUE, fix = FALSE, ...) {
+vcovCL.heckmanGE = function (x, cluster = NULL, type = NULL, sandwich = TRUE, fix = FALSE, ...) {
 
 
-        rval <- meatCL.heckmange(x, cluster = cluster, type = type, ...)
-        #rval <- meatCL.heckmange(x, cluster = cluster, type = type)
+        rval <- meatCL.heckmanGE(x, cluster = cluster, type = type, ...)
+        #rval <- meatCL.heckmanGE(x, cluster = cluster, type = type)
 
         if (sandwich)
-                rval <- sandwich.heckmange(x,
-                                               bread. = bread.heckmange,
+                rval <- sandwich.heckmanGE(x,
+                                               bread. = bread.heckmanGE,
                                                meat.  = rval)
         if (fix && any((eig <- eigen(rval, symmetric = TRUE))$values < 0)) {
                 eig$values <- pmax(eig$values, 0)

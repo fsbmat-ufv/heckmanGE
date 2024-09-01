@@ -1,16 +1,16 @@
-#' predict.heckmange
+#' predict.heckmanGE
 #' Predictions from the Generalized Heckman Model
 #'
-#' Generates predictions from a fitted `heckmange` model. Predictions can be made on the scale of the linear predictors or on the scale of the response variable. The function can also return confidence intervals for the predictions if requested.
+#' Generates predictions from a fitted `heckmanGE` model. Predictions can be made on the scale of the linear predictors or on the scale of the response variable. The function can also return confidence intervals for the predictions if requested.
 #'
-#' @param object An object of class `heckmange`. This object should be a fitted model from which predictions will be made.
+#' @param object An object of class `heckmanGE`. This object should be a fitted model from which predictions will be made.
 #' @param part A character vector specifying the model part for which to make predictions. Options include "selection", "outcome", "dispersion", and "correlation". The default is "outcome". If multiple parts are specified, only the "outcome" part will be used.
 #' @param newdata Optionally, a data frame containing new data for making predictions. If omitted, the function uses the fitted linear predictors from the model object.
 #' @param type The type of prediction required. The default is "link", which returns predictions on the scale of the linear predictors. If "response" is specified, predictions are returned on the scale of the response variable after applying the inverse link function.
 #' @param cofint A logical indicating whether to return confidence intervals for the predictions. Default is FALSE.
 #' @param confidence_level A numeric value specifying the confidence level for the confidence intervals if `cofint` is TRUE. Default is 0.95.
 #' @return
-#' A vector or matrix of predictions from the `heckmange` object, depending on the value of `cofint`. If `cofint` is TRUE, the function returns a matrix with the mean predicted value, and the lower and upper bounds of the confidence interval.
+#' A vector or matrix of predictions from the `heckmanGE` object, depending on the value of `cofint`. If `cofint` is TRUE, the function returns a matrix with the mean predicted value, and the lower and upper bounds of the confidence interval.
 #'
 #' @details
 #' - The function first checks the validity of the `part` and `type` arguments.
@@ -22,7 +22,7 @@
 #' @importFrom utils head
 #' @importFrom vctrs vec_size
 #' @export
-predict.heckmange = function(object,
+predict.heckmanGE = function(object,
                                  part = c("selection", "outcome", "dispersion", "correlation"),
                                  newdata = NULL,
                                  type    = c("link", "response"),
@@ -57,7 +57,7 @@ predict.heckmange = function(object,
 
                 # model.frame requires the parameter to be formula
                 newdata_model.frame  <- eval(expr) #, envir = parent.frame())
-                original_model.frame <- model.frame.heckmange(object = object, part = part)
+                original_model.frame <- model.frame.heckmanGE(object = object, part = part)
 
                 original_model.frame$`(weights)` <- NULL
 
@@ -85,7 +85,7 @@ predict.heckmange = function(object,
 
                 X <- model.matrix(terms(original_model.frame), newdata_model.frame)
 
-                coef = coef.heckmange(object = object, part = part)
+                coef = coef.heckmanGE(object = object, part = part)
 
                 predicted = as.numeric(X %*% coef)
 
@@ -93,7 +93,7 @@ predict.heckmange = function(object,
 
 
         if(cofint == T){
-                Sigma = vcov.heckmange(object, part)
+                Sigma = vcov.heckmanGE(object, part)
 
                 se = as.numeric(sapply(1:nrow(X), \(i){
                         sqrt(X[i, ] %*% Sigma %*% X[i, ])

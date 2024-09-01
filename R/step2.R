@@ -23,7 +23,7 @@ step2 <- function(YS, XS, YO, XO, Msigma, Mrho, w) {
         # Two-step estimation
 
         w1 = w[YS == 1]
-
+        C_Cdqrls <- getNativeSymbolInfo("Cdqrls", PACKAGE = getLoadedDLLs()$stats)
         # Selection equation
         fit1 = glm.fit(y = YS, x = XS, weights = w, family = binomial(link = "probit"))
         IMR  <- dnorm(fit1$linear.predictors)/pnorm(fit1$linear.predictors)

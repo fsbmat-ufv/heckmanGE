@@ -1,4 +1,4 @@
-#' heckmange: A Package for Fitting Sample Selection Models
+#' heckmanGE: A Package for Fitting Sample Selection Models
 #'
 #' This package provides functions for fitting sample selection models, specifically the Heckman-Ge model. It includes functionality for specifying selection and outcome equations, as well as adjusting parameters for dispersion and correlation.
 #'
@@ -8,7 +8,7 @@
 #'
 #' @keywords Heckman, Sample Selection
 #'
-#' @name heckmange
+#' @name heckmanGE
 NULL
 
 #' Medical Expenditure Panel Survey (MEPS) Data
@@ -52,5 +52,5 @@ NULL
 "MEPS2001"
 
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("If you have questions, suggestions, or comments regarding the 'heckmange' package, please contact Fernando de Souza Bastos at fernando.bastos@ufv.br.")
+  packageStartupMessage("If you have questions, suggestions, or comments regarding the 'heckmanGE' package, please contact Fernando de Souza Bastos at fernando.bastos@ufv.br.")
 }
