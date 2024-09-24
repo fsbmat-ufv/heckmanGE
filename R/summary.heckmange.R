@@ -1,16 +1,16 @@
-#' summary.heckmange
+#' summary.heckmanGE
 #' Summary of Generalized Heckman Model
 #'
 #' Provides a summary of the parameters and diagnostic information from a fitted Generalized Heckman model.
 #'
-#' @param object An object of class `heckmange` representing a fitted Generalized Heckman model.
+#' @param object An object of class `heckmanGE` representing a fitted Generalized Heckman model.
 #' @param ... Additional arguments passed to other methods.
 #' @return
 #' Prints a detailed summary of the fitted Generalized Heckman model, including parameter estimates, standard errors, model fit statistics, and optimization details.
 #' @importFrom miscTools coefTable
 #' @importFrom stats printCoefmat
 #' @export
-summary.heckmange  <- function(object, ... ){
+summary.heckmanGE  <- function(object, ... ){
 
         indexes       <- object$coefficients_indexes
 
@@ -52,7 +52,7 @@ summary.heckmange  <- function(object, ... ){
         optim_convergence    = object$optimization$convergence_code
         optim_message        = object$optimization$message
 
-        cat("Generalized Heckman Model (Package: heckmange)\n")
+        cat("Generalized Heckman Model (Package: heckmanGE)\n")
         cat("--------------------------------------------------\n")
         cat("\n")
         cat("Call:\n")
