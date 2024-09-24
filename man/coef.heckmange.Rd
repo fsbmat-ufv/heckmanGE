@@ -2,7 +2,7 @@
 % Please edit documentation in R/coef.heckmanGE.R
 \name{coef.heckmanGE}
 \alias{coef.heckmanGE}
-\title{coef.heckmanGE}
+\title{Extract Coefficients from a Generalized Heckman Model}
 \usage{
 \method{coef}{heckmanGE}(
   object,
@@ -13,26 +13,42 @@
 \arguments{
 \item{object}{An object of class \code{heckmanGE}, which contains the fitted model.}
 
-\item{part}{A character vector indicating which parts of the model coefficients to return. Valid options are: "selection", "outcome", "dispersion", and "correlation". By default, all parts are included in the returned coefficients.}
+\item{part}{A character vector indicating which parts of the model coefficients to return. Valid options are: \code{"selection"}, \code{"outcome"}, \code{"dispersion"}, and \code{"correlation"}. Multiple parts can be specified. By default, all parts are included in the returned coefficients.}
 
-\item{\dots}{Additional arguments passed to or from other methods. These are not used in this method but must be included to match the generic method signature.}
+\item{\dots}{Additional arguments passed to or from other methods. Currently, these are not used in this method but must be included to match the generic method signature.}
 }
 \value{
-A numeric vector containing the coefficients extracted from the model object. The coefficients correspond to the specified model parts.
+A numeric vector containing the coefficients extracted from the model object. The coefficients correspond to the specified model parts, returned in the order they are requested.
 }
 \description{
-Extract Coefficients from a Generalized Heckman Model
+This function extracts the coefficients from a \code{heckmanGE} class object. You can specify which parts of the model you want to retrieve the coefficients for: selection, outcome, dispersion, or correlation. By default, the function returns the complete coefficient vector for all parts.
 }
 \details{
-This function extracts the coefficients from a \code{heckmanGE} class object. You can specify which parts of the model you want to retrieve the coefficients for: selection, outcome, dispersion, or correlation. By default, the function returns the complete coefficient vector for all parts.
-
 The \code{coef.heckmanGE} function retrieves coefficients from the \code{heckmanGE} model object based on the specified parts. The parts represent different components of the Heckman model:
 \itemize{
-\item "selection": Coefficients related to the selection equation.
-\item "outcome": Coefficients related to the outcome equation.
-\item "dispersion": Coefficients related to the dispersion equation.
-\item "correlation": Coefficients related to the correlation between selection and outcome.
+\item \code{"selection"}: Coefficients related to the selection equation.
+\item \code{"outcome"}: Coefficients related to the outcome equation.
+\item \code{"dispersion"}: Coefficients related to the dispersion equation.
+\item \code{"correlation"}: Coefficients related to the correlation between selection and outcome.
 }
 
-The function collects the appropriate indices for the requested parts and returns the corresponding coefficients.
+By default, the function returns coefficients from all parts. You can specify one or more parts in the \code{part} argument to extract coefficients from specific components.
+}
+\examples{
+data(MEPS2001)
+selectEq  <- dambexp ~ age + female + educ + blhisp + totchr + ins + income
+outcomeEq <- lnambx ~ age + female + educ + blhisp + totchr + ins
+dispersion  <- ~ age + female + totchr + ins
+correlation  <- ~ age
+fit <- heckmanGE(selection = selectEq,
+                 outcome = outcomeEq,
+                 dispersion = dispersion,
+                 correlation = correlation,
+                 data = MEPS2001)
+# Extracting all coefficients:
+coef(fit)
+
+# Extracting only the selection and outcome coefficients:
+coef(fit, part = c("selection", "outcome"))
+
 }

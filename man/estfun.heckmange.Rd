@@ -7,20 +7,34 @@
 estfun.heckmanGE(x, ...)
 }
 \arguments{
-\item{x}{An object of class \code{heckmanGE}, which contains the fitted model, including model responses, model matrices, weights, and coefficient indexes.}
+\item{x}{An object of class \code{heckmanGE}, typically the result of fitting a generalized Heckman model. This object should contain model responses, model matrices, weights, and coefficient indexes necessary for the computation of the gradient.}
 
-\item{...}{Additional arguments (currently not used).}
+\item{...}{Additional arguments (currently not used, reserved for future extensions).}
 }
 \value{
-A matrix of the same dimensions as the number of observations by the number of parameters in the model, where each element represents the gradient of the log-likelihood function with respect to the parameters.
+A matrix of dimensions \verb{n x p}, where \code{n} is the number of observations and \code{p} is the number of parameters in the model. Each element of the matrix corresponds to the gradient of the log-likelihood function with respect to a given parameter for each observation.
 }
 \description{
-This function calculates the estimating functions (gradient of the log-likelihood) for the Generalized Heckman model.
-It is used for model diagnostics and for obtaining the estimating functions required for inference.
+This function calculates the estimating functions (i.e., the gradient of the log-likelihood) for the Generalized Heckman model.
+It is primarily used for model diagnostics and inference, providing the gradient for each observation with respect to model parameters.
 }
 \details{
-The function computes the gradient of the log-likelihood function for the Generalized Heckman model by extracting and manipulating various components of the model object.
-It calculates the gradient based on the selection and outcome equations, as well as the dispersion and correlation components.
+The function computes the gradient of the log-likelihood function for the Generalized Heckman model, which includes the selection, outcome, dispersion, and correlation components.
 
-The function internally defines a helper function \code{gradlik_gen_i} to compute the gradient for each observation based on the model parameters.
+The gradient is calculated per observation, and internally, the helper function \code{gradlik_gen_i} computes the gradient for each observation given the model parameters. This involves extracting components such as model matrices, weights, and coefficient indexes, and performing matrix operations specific to the model's structure.
+}
+\examples{
+# Assuming 'model' is a fitted object of class 'heckmanGE':
+data(MEPS2001)
+selectEq  <- dambexp ~ age + female + educ + blhisp + totchr + ins + income
+outcomeEq <- lnambx ~ age + female + educ + blhisp + totchr + ins
+dispersion  <- ~ age + female + totchr + ins
+correlation  <- ~ age
+fit <- heckmanGE(selection = selectEq,
+                 outcome = outcomeEq,
+                 dispersion = dispersion,
+                 correlation = correlation,
+                 data = MEPS2001)
+estfun.heckmanGE(fit)
+
 }

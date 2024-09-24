@@ -1,32 +1,52 @@
 #' fitheckmanGE
 #'
-#' Optimized Function for Fitting the Generalized Heckman Model
+#' Newton-Raphson Optimization for Generalized Heckman Model Estimation
 #'
-#' This function estimates the parameters of a generalized Heckman selection model using a Newton-Raphson optimization algorithm. It supports the modeling of selection and outcome equations, along with associated dispersion and correlation structures.
+#' This function estimates the parameters of a generalized Heckman selection
+#' model using a Newton-Raphson optimization algorithm. It supports the modeling
+#' of selection and outcome equations, along with associated dispersion and
+#' correlation structures.
 #'
-#' @param start A numeric vector with initial parameter values for the model.
-#' @param YS A binary vector indicating the selection equation outcomes (1 for selected, 0 for not selected).
-#' @param XS A matrix of predictors for the selection equation.
-#' @param YO A vector of observed outcomes for the outcome equation.
-#' @param XO A matrix of predictors for the outcome equation.
-#' @param Msigma A matrix related to the dispersion parameter.
-#' @param Mrho A matrix related to the correlation parameter.
-#' @param w A numeric vector of weights for the observations.
+#' @param start A numeric vector of initial parameter guesses for the selection,
+#' outcome, dispersion, and correlation equations.
+#' @param YS A binary vector indicating selection status (1 if selected, 0 otherwise).
+#' @param XS A matrix of independent variables for the selection equation.
+#' @param YO A numeric vector of observed outcomes (dependent variable) for the
+#' outcome equation.
+#' @param XO A matrix of independent variables for the outcome equation.
+#' @param Msigma A matrix representing the predictors for the dispersion parameter.
+#' @param Mrho A matrix representing the predictors for the correlation parameter.
+#' @param w A numeric vector of observation weights, used in the likelihood
+#' computation.
 #'
-#' @return A list containing:
+#' @return A list with the following components:
 #' \describe{
-#'   \item{coefficients}{Estimated coefficients for the selection, outcome, dispersion, and correlation equations.}
-#'   \item{fitted.values}{Fitted values for the selection, outcome, dispersion, and correlation equations.}
-#'   \item{residuals}{Residuals for the selection and outcome equations.}
-#'   \item{loglik}{The log-likelihood of the fitted model.}
-#'   \item{vcov}{The variance-covariance matrix of the estimated parameters.}
-#'   \item{aic}{The Akaike Information Criterion (AIC) for the model.}
-#'   \item{bic}{The Bayesian Information Criterion (BIC) for the model.}
-#'   \item{optimization}{Details of the optimization process, including the convergence status.}
+#'   \item{coefficients}{Named vector of estimated coefficients for selection,
+#'   outcome, dispersion, and correlation equations.}
+#'   \item{fitted.values}{Named list with fitted values for each equation
+#'   (selection, outcome, dispersion, correlation).}
+#'   \item{residuals}{Numeric vector of residuals for the selection and outcome
+#'   equations.}
+#'   \item{loglik}{Log-likelihood value of the fitted model.}
+#'   \item{vcov}{Variance-covariance matrix of the estimated parameters.}
+#'   \item{aic}{Akaike Information Criterion (AIC) for the model.}
+#'   \item{bic}{Bayesian Information Criterion (BIC) for the model.}
+#'   \item{optimization}{Details of the optimization process, including
+#'   convergence information.}
 #' }
 #'
 #' @details
-#' The function optimizes the log-likelihood of a generalized Heckman selection model using a Newton-Raphson algorithm. The model allows for estimation of selection bias in the outcome equation, and incorporates additional parameters for dispersion and correlation.
+#' This function uses the Newton-Raphson algorithm to estimate the parameters of
+#' a generalized Heckman model, which accounts for sample selection bias.
+#' The model is composed of a selection equation (modeled by `YS` and `XS`), an
+#' outcome equation (modeled by `YO` and `XO`), and additional equations for
+#' dispersion (`Msigma`) and correlation (`Mrho`). The optimization process
+#' maximizes the log-likelihood of the model, allowing for robust estimation of
+#' selection bias, while also estimating associated dispersion and correlation
+#' parameters.
+#'
+#' The function outputs the coefficients, fitted values, residuals, and several
+#' information criteria for model comparison.
 #'
 #' @importFrom maxLik maxNR
 #' @export

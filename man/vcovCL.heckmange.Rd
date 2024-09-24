@@ -2,7 +2,7 @@
 % Please edit documentation in R/vcovCL.heckmanGE.R
 \name{vcovCL.heckmanGE}
 \alias{vcovCL.heckmanGE}
-\title{Variância-Covariância com Correção por Agrupamento para Modelos Heckman}
+\title{Variance-Covariance with Cluster Correction for Heckman Models}
 \usage{
 vcovCL.heckmanGE(
   x,
@@ -14,35 +14,32 @@ vcovCL.heckmanGE(
 )
 }
 \arguments{
-\item{x}{Um objeto resultante da estimativa de um modelo Heckman usando o método \code{heckmanGE}.}
+\item{x}{An object resulting from the estimation of a Heckman model using the \code{heckmanGE} method.}
 
-\item{cluster}{Um vetor ou fator que identifica os agrupamentos (clusters) nos dados. Se NULL, assume
-que não há agrupamento.}
+\item{cluster}{A vector or factor identifying clusters in the data. If NULL, assumes no clustering.}
 
-\item{type}{Um caractere que especifica o tipo de correção por agrupamento a ser utilizada. Pode ser
-\code{"HC0"}, \code{"HC1"}, \code{"HC2"}, ou \code{"HC3"}.}
+\item{type}{A character string specifying the type of cluster correction to be applied. It can be
+\code{"HC0"}, \code{"HC1"}, \code{"HC2"}, or \code{"HC3"}.}
 
-\item{sandwich}{Um valor lógico. Se TRUE, a função aplica a estimativa sandwich à matriz de
-variância-covariância.}
+\item{sandwich}{A logical value. If TRUE, the function applies the sandwich estimator to the
+variance-covariance matrix.}
 
-\item{fix}{Um valor lógico. Se TRUE, corrige eventuais valores negativos nos autovalores da matriz
-de variância-covariância.}
+\item{fix}{A logical value. If TRUE, corrects any negative eigenvalues in the variance-covariance matrix.}
 
-\item{...}{Argumentos adicionais que podem ser passados para métodos internos.}
+\item{...}{Additional arguments that can be passed to internal methods.}
 }
 \value{
-Uma matriz de variância-covariância corrigida.
+A corrected variance-covariance matrix.
 }
 \description{
-A função \code{vcovCL.heckmanGE} calcula a matriz de variância-covariância de um modelo Heckman,
-aplicando uma correção por agrupamento (cluster). Isso é útil para obter estimativas robustas da
-variância, especialmente quando há dependência dentro dos grupos.
+The \code{vcovCL.heckmanGE} function computes the variance-covariance matrix of a Heckman model,
+applying a cluster correction. This is useful for obtaining robust variance estimates, especially
+when there is within-group dependence.
 }
 \details{
-Esta função é uma implementação especializada para a obtenção de uma matriz de
-variância-covariância robusta a partir de modelos Heckman estimados com \code{heckmanGE}. Ela permite
-a aplicação de correção por agrupamento, o que é especialmente importante em contextos onde
-observações dentro de grupos podem não ser independentes.
+This function is a specialized implementation for obtaining a robust variance-covariance matrix
+from Heckman models estimated with \code{heckmanGE}. It allows for cluster correction, which is particularly
+important in contexts where observations within groups may not be independent.
 }
 \seealso{
 \code{\link[=meatCL.heckmanGE]{meatCL.heckmanGE()}}, \code{\link[=sandwich.heckmanGE]{sandwich.heckmanGE()}}, \code{\link[=bread.heckmanGE]{bread.heckmanGE()}}

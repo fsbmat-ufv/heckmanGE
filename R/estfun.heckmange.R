@@ -1,18 +1,31 @@
 #' Compute Estimating Functions for Generalized Heckman Model
 #'
-#' This function calculates the estimating functions (gradient of the log-likelihood) for the Generalized Heckman model.
-#' It is used for model diagnostics and for obtaining the estimating functions required for inference.
+#' This function calculates the estimating functions (i.e., the gradient of the log-likelihood) for the Generalized Heckman model.
+#' It is primarily used for model diagnostics and inference, providing the gradient for each observation with respect to model parameters.
 #'
-#' @param x An object of class `heckmanGE`, which contains the fitted model, including model responses, model matrices, weights, and coefficient indexes.
-#' @param ... Additional arguments (currently not used).
+#' @param x An object of class `heckmanGE`, typically the result of fitting a generalized Heckman model. This object should contain model responses, model matrices, weights, and coefficient indexes necessary for the computation of the gradient.
+#' @param ... Additional arguments (currently not used, reserved for future extensions).
 #'
 #' @details
-#' The function computes the gradient of the log-likelihood function for the Generalized Heckman model by extracting and manipulating various components of the model object.
-#' It calculates the gradient based on the selection and outcome equations, as well as the dispersion and correlation components.
+#' The function computes the gradient of the log-likelihood function for the Generalized Heckman model, which includes the selection, outcome, dispersion, and correlation components.
 #'
-#' The function internally defines a helper function `gradlik_gen_i` to compute the gradient for each observation based on the model parameters.
+#' The gradient is calculated per observation, and internally, the helper function `gradlik_gen_i` computes the gradient for each observation given the model parameters. This involves extracting components such as model matrices, weights, and coefficient indexes, and performing matrix operations specific to the model's structure.
 #'
-#' @return A matrix of the same dimensions as the number of observations by the number of parameters in the model, where each element represents the gradient of the log-likelihood function with respect to the parameters.
+#' @return A matrix of dimensions `n x p`, where `n` is the number of observations and `p` is the number of parameters in the model. Each element of the matrix corresponds to the gradient of the log-likelihood function with respect to a given parameter for each observation.
+#'
+#' @examples
+#' # Assuming 'model' is a fitted object of class 'heckmanGE':
+#' data(MEPS2001)
+#' selectEq  <- dambexp ~ age + female + educ + blhisp + totchr + ins + income
+#' outcomeEq <- lnambx ~ age + female + educ + blhisp + totchr + ins
+#' dispersion  <- ~ age + female + totchr + ins
+#' correlation  <- ~ age
+#' fit <- heckmanGE(selection = selectEq,
+#'                  outcome = outcomeEq,
+#'                  dispersion = dispersion,
+#'                  correlation = correlation,
+#'                  data = MEPS2001)
+#' estfun.heckmanGE(fit)
 #'
 #' @export
 estfun.heckmanGE <- function(x, ...){

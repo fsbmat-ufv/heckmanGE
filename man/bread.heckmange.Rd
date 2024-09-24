@@ -7,18 +7,28 @@
 bread.heckmanGE(object, ...)
 }
 \arguments{
-\item{object}{An object of class \code{fitheckmanGE}, which is the result of fitting a Heckman selection model using the \code{fitheckmanGE} function.}
+\item{object}{An object of class \code{fitheckmanGE}, which is the result of fitting
+a Heckman selection model using the \code{fitheckmanGE} function.}
 
 \item{\dots}{Additional arguments (currently unused).}
 }
 \value{
-A matrix representing the bread component of the sandwich estimator. The matrix is calculated as the product of the number of observations and the variance-covariance matrix of the estimated parameters.
+A matrix representing the bread component of the sandwich estimator. The
+matrix is calculated as the product of the number of observations and the
+variance-covariance matrix of the estimated parameters.
 }
 \description{
 Bread Function for the \code{fitheckmanGE} Model
 }
 \details{
-This function calculates the "bread" component of the sandwich estimator for the \code{fitheckmanGE} model. The bread matrix is typically defined as the product of the number of observations and the variance-covariance matrix of the estimated parameters.
+This function calculates the "bread" component of the sandwich estimator for
+the \code{fitheckmanGE} model. The bread matrix is typically defined as the product
+of the number of observations and the variance-covariance matrix of the
+estimated parameters.
 
-The bread matrix is an essential component of the sandwich estimator used to obtain robust standard errors. It reflects the variability in the estimated parameters due to the model's fit. The function uses the number of observations and the variance-covariance matrix from the \code{fitheckmanGE} model object to compute this matrix.
+The bread matrix is an essential component of the sandwich estimator used to
+obtain robust standard errors. It reflects the variability in the estimated
+parameters due to the model's fit. The function uses the number of observations
+and the variance-covariance matrix from the \code{fitheckmanGE} model object to
+compute this matrix.
 }

@@ -20,22 +20,40 @@ heckmanGE(
 
 \item{outcome}{A formula. Outcome Equation.}
 
-\item{dispersion}{A right-handed formula. The equation for fitting of the Dispersion Parameter.}
+\item{dispersion}{A right-handed formula. The equation for fitting of the
+Dispersion Parameter.}
 
-\item{correlation}{A right-handed formula. The equation for fitting of the Correlation Parameter.}
+\item{correlation}{A right-handed formula. The equation for fitting of the
+Correlation Parameter.}
 
 \item{data}{A data.frame.}
 
-\item{weights}{an optional vector of weights to be used in the fitting process. Should be NULL or a numeric vector.}
+\item{weights}{an optional vector of weights to be used in the fitting process.
+Should be NULL or a numeric vector.}
 
-\item{cluster}{a variable indicating the clustering of observations, a list (or data.frame) thereof, or a formula specifying which variables from the fitted model should be used. See documentation for sandwich::vcovCL}
+\item{cluster}{a variable indicating the clustering of observations, a list
+(or data.frame) thereof, or a formula specifying which variables from the
+fitted model should be used. See documentation for sandwich::vcovCL. A formula
+or list specifying the clusters for robust standard errors. Clustering adjusts
+the standard errors by accounting for correlations within clusters.}
 
-\item{start}{Optional. A numeric vector with the initial values for the parameters.}
+\item{start}{Optional. A numeric vector with the initial values for the
+parameters.}
 }
 \value{
 A list of results from the fitted model, including parameter estimates, the Hessian matrix, number of observations, and other relevant statistics. If initial values are not provided, the function estimates them using the Heckman two-step method.
 
-#' Returns... several things... # TEMOS QUE DESCREVER AQUI
+A list containing:
+\describe{
+\item{call}{The matched function call.}
+\item{coefficients}{Estimated coefficients for the selection, outcome,
+dispersion, and correlation equations.}
+\item{vcov}{The covariance matrix of the estimated coefficients.}
+\item{logLik}{The log-likelihood of the fitted model.}
+\item{model.frames}{List of model frames for each equation (selection, outcome,
+dispersion, and correlation).}
+\item{fitted.values}{Fitted values of the outcome equation.}
+}
 }
 \description{
 This package provides functions for fitting sample selection models, specifically the Heckman-Ge model. It includes functionality for specifying selection and outcome equations, as well as adjusting parameters for dispersion and correlation.
@@ -50,6 +68,11 @@ Optimized Function for fitting the Generalized Heckman Model
 The heckmanGE() function fits a generalization of the Heckman sample
 selection model, allowing sample selection bias and dispersion parameters
 to depend on covariates.
+The \code{heckmanGE()} function fits a generalization of the Heckman sample
+selection model, and is compatible with robust variance-covariance estimation
+using packages such as \pkg{sandwich}. In particular, the
+\code{\link[sandwich]{vcovCL}} function can be used for clustering, which
+adjusts the standard errors by accounting for intra-cluster correlations in the data.
 }
 \examples{
 data(MEPS2001)
@@ -57,6 +80,20 @@ selectEq  <- dambexp ~ age + female + educ + blhisp + totchr + ins + income
 outcomeEq <- lnambx ~ age + female + educ + blhisp + totchr + ins
 dispersion  <- ~ age + female + totchr + ins
 correlation  <- ~ age
+fit <- heckmanGE(selection = selectEq,
+                 outcome = outcomeEq,
+                 dispersion = dispersion,
+                 correlation = correlation,
+                 data = MEPS2001)
+summary(fit)
+}
+\seealso{
+\code{\link[sandwich]{vcovCL}} for computing robust standard errors with clustering.
+The function is compatible with the \pkg{sandwich} package for estimating
+heteroskedasticity-consistent and cluster-robust standard errors.
+This can be useful for adjusting the standard errors when dealing with grouped
+or clustered data. For more details, see the documentation for
+\code{\link[sandwich]{vcovCL}}.
 }
 \author{
 Fernando de Souza Bastos

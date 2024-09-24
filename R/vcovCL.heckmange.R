@@ -1,26 +1,23 @@
-#' Variância-Covariância com Correção por Agrupamento para Modelos Heckman
+#' Variance-Covariance with Cluster Correction for Heckman Models
 #'
-#' A função `vcovCL.heckmanGE` calcula a matriz de variância-covariância de um modelo Heckman,
-#' aplicando uma correção por agrupamento (cluster). Isso é útil para obter estimativas robustas da
-#' variância, especialmente quando há dependência dentro dos grupos.
+#' The `vcovCL.heckmanGE` function computes the variance-covariance matrix of a Heckman model,
+#' applying a cluster correction. This is useful for obtaining robust variance estimates, especially
+#' when there is within-group dependence.
 #'
-#' @param x Um objeto resultante da estimativa de um modelo Heckman usando o método `heckmanGE`.
-#' @param cluster Um vetor ou fator que identifica os agrupamentos (clusters) nos dados. Se NULL, assume
-#' que não há agrupamento.
-#' @param type Um caractere que especifica o tipo de correção por agrupamento a ser utilizada. Pode ser
-#' `"HC0"`, `"HC1"`, `"HC2"`, ou `"HC3"`.
-#' @param sandwich Um valor lógico. Se TRUE, a função aplica a estimativa sandwich à matriz de
-#' variância-covariância.
-#' @param fix Um valor lógico. Se TRUE, corrige eventuais valores negativos nos autovalores da matriz
-#' de variância-covariância.
-#' @param ... Argumentos adicionais que podem ser passados para métodos internos.
+#' @param x An object resulting from the estimation of a Heckman model using the `heckmanGE` method.
+#' @param cluster A vector or factor identifying clusters in the data. If NULL, assumes no clustering.
+#' @param type A character string specifying the type of cluster correction to be applied. It can be
+#' `"HC0"`, `"HC1"`, `"HC2"`, or `"HC3"`.
+#' @param sandwich A logical value. If TRUE, the function applies the sandwich estimator to the
+#' variance-covariance matrix.
+#' @param fix A logical value. If TRUE, corrects any negative eigenvalues in the variance-covariance matrix.
+#' @param ... Additional arguments that can be passed to internal methods.
 #'
-#' @details Esta função é uma implementação especializada para a obtenção de uma matriz de
-#' variância-covariância robusta a partir de modelos Heckman estimados com `heckmanGE`. Ela permite
-#' a aplicação de correção por agrupamento, o que é especialmente importante em contextos onde
-#' observações dentro de grupos podem não ser independentes.
+#' @details This function is a specialized implementation for obtaining a robust variance-covariance matrix
+#' from Heckman models estimated with `heckmanGE`. It allows for cluster correction, which is particularly
+#' important in contexts where observations within groups may not be independent.
 #'
-#' @return Uma matriz de variância-covariância corrigida.
+#' @return A corrected variance-covariance matrix.
 #'
 #' @seealso [meatCL.heckmanGE()], [sandwich.heckmanGE()], [bread.heckmanGE()]
 #'
@@ -28,18 +25,16 @@
 #' @importFrom utils tail
 #' @export
 vcovCL.heckmanGE = function (x, cluster = NULL, type = NULL, sandwich = TRUE, fix = FALSE, ...) {
+  rval <- meatCL.heckmanGE(x, cluster = cluster, type = type, ...)
+  #rval <- meatCL.heckmanGE(x, cluster = cluster, type = type)
 
-
-        rval <- meatCL.heckmanGE(x, cluster = cluster, type = type, ...)
-        #rval <- meatCL.heckmanGE(x, cluster = cluster, type = type)
-
-        if (sandwich)
-                rval <- sandwich.heckmanGE(x,
-                                               bread. = bread.heckmanGE,
-                                               meat.  = rval)
-        if (fix && any((eig <- eigen(rval, symmetric = TRUE))$values < 0)) {
-                eig$values <- pmax(eig$values, 0)
-                rval[] <- crossprod(sqrt(eig$values) * t(eig$vectors))
-        }
-        return(rval)
+  if (sandwich)
+    rval <- sandwich.heckmanGE(x,
+                               bread. = bread.heckmanGE,
+                               meat.  = rval)
+  if (fix && any((eig <- eigen(rval, symmetric = TRUE))$values < 0)) {
+    eig$values <- pmax(eig$values, 0)
+    rval[] <- crossprod(sqrt(eig$values) * t(eig$vectors))
+  }
+  return(rval)
 }
