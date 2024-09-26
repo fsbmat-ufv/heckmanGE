@@ -85,8 +85,10 @@ heckmanGE <- function(selection, outcome, dispersion, correlation,
   yO_name    = as.character(outcome[[2]])
   weight_var = as.character(mf[match(c("weights"), names(mf), 0)])
 
-  # Replacing NA with zeros in the outcome variable, when selection == 0
-  data[[yO_name]][data[[yS_name]] %in% 0] <- 0.0
+  # Identifying complete cases - Y variables
+  complete_Y_selection          = complete.cases(data[, unique(c(yS_name, all.vars(selection)))])
+  complete_Y_outcome_dispersion = complete.cases(data[, unique(c(all.vars(outcome), all.vars(dispersion)))])
+  complete_Y_correlation        = complete.cases(data[, all.vars(correlation)])
 
   # Gathering all variable names mentioned in the function call
   modelvars = unique(c(all.vars(selection),
@@ -96,15 +98,10 @@ heckmanGE <- function(selection, outcome, dispersion, correlation,
                        all.vars(cluster),
                        weight_var))
 
-  # Identifying complete cases
-  complete = complete.cases(data[, modelvars])
 
   # Selecting complete cases
-  data <- data[complete, modelvars]
-
-  # Making outcome = NA again, when selection == 0
-  data[[yO_name]][data[[yS_name]] %in% 0] <- NA
-
+  data <- data[complete_Y_selection & complete_Y_correlation & ((data[[yS_name]] %in% 0) | ((data[[yS_name]] %in% 1) & complete_Y_outcome_dispersion)),
+               modelvars]
 
   # Extracting model matrices --------------------------------------------
 
@@ -113,9 +110,10 @@ heckmanGE <- function(selection, outcome, dispersion, correlation,
   mfS <- mf[c(1, m)]
   mfS$drop.unused.levels <- TRUE
   mfS$na.action <- na.pass
+  mfS$data <- quote(data)
   mfS[[1]] <- as.name("model.frame")
   names(mfS)[2] <- "formula" # model.frame requires the parameter to be formula
-  mfS <- eval(mfS, parent.frame())
+  mfS <- eval(mfS)
   mtS <- terms(mfS)
   XS <- model.matrix(mtS, mfS)
   YS <- model.response(mfS)
@@ -126,12 +124,14 @@ heckmanGE <- function(selection, outcome, dispersion, correlation,
   mfO$na.action <- na.pass
   mfO$drop.unused.levels <- TRUE
   mfO$na.action <- na.pass
+  mfO$data <- quote(data)
   mfO[[1]] <- as.name("model.frame")
   names(mfO)[2] <- "formula"
-  mfO <- eval(mfO, parent.frame())
+  mfO <- eval(mfO)
   mtO <- attr(mfO, "terms")
   XO <- model.matrix(mtO, mfO)
   YO <- model.response(mfO)
+
 
   # Dispersion Equations ----
   m <- match(c("dispersion", "data", "subset", "weights", "offset"), names(mf), 0)
@@ -139,11 +139,13 @@ heckmanGE <- function(selection, outcome, dispersion, correlation,
   mfD$na.action <- na.pass
   mfD$drop.unused.levels <- TRUE
   mfD$na.action <- na.pass
+  mfD$data <- quote(data)
   mfD[[1]] <- as.name("model.frame")
   names(mfD)[2] <- "formula"
-  mfD <- eval(mfD, parent.frame())
+  mfD <- eval(mfD)
   mtD <- attr(mfD, "terms")
   Msigma <- model.matrix(mtD, mfD)
+
 
   # Correlation Equation ----
   m <- match(c("correlation", "data", "subset", "weights", "offset"), names(mf), 0)
@@ -151,9 +153,10 @@ heckmanGE <- function(selection, outcome, dispersion, correlation,
   mfC$na.action <- na.pass
   mfC$drop.unused.levels <- TRUE
   mfC$na.action <- na.pass
+  mfC$data <- quote(data)
   mfC[[1]] <- as.name("model.frame")
   names(mfC)[2] <- "formula"
-  mfC <- eval(mfC, parent.frame())
+  mfC <- eval(mfC)
   mtC <- attr(mfC, "terms")
   Mrho <- model.matrix(mtC, mfC)
 
@@ -218,9 +221,10 @@ heckmanGE <- function(selection, outcome, dispersion, correlation,
 
     mf_cluster           <- mf[c(1, m)]
     names(mf_cluster)[2] <- "formula"
-    mf_cluster[[1]] <- as.name("model.frame")
 
-    mf_cluster <- eval(mf_cluster, parent.frame())
+    mf_cluster$data = quote(data)
+    mf_cluster[[1]] <- as.name("model.frame")
+    mf_cluster <- eval(mf_cluster)
 
     vcov_clustered <- vcovCL.heckmanGE(result, cluster = mf_cluster)
     se_clustered   = sqrt(diag(vcov_clustered))
@@ -233,6 +237,12 @@ heckmanGE <- function(selection, outcome, dispersion, correlation,
 
   result
 }
+
+
+
+
+
+
 
 #data(MEPS2001)
 #d = rbind(MEPS2001, MEPS2001, MEPS2001, MEPS2001, MEPS2001, MEPS2001)

@@ -1,4 +1,4 @@
 #.onLoad <- function(...) {
-#        vctrs::s3_register("heckmange::bread",  "heckmange")
-#        vctrs::s3_register("heckmange::estfun", "heckmange")
+#        vctrs::s3_register("heckmanGE::bread",  "heckmanGE")
+#        vctrs::s3_register("heckmanGE::estfun", "heckmanGE")
 #}

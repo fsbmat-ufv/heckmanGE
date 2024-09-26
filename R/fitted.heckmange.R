@@ -1,13 +1,13 @@
-#' fitted.heckmange
+#' fitted.heckmanGE
 #' Extract Fitted Values of the Generalized Heckman Model
 #'
-#' This function extracts the fitted values from a `heckmange` object. You can specify which part of the model you want to retrieve the fitted values for: selection, outcome, dispersion, or correlation. By default, it returns the fitted values for the outcome part of the model.
+#' This function extracts the fitted values from a `heckmanGE` object. You can specify which part of the model you want to retrieve the fitted values for: selection, outcome, dispersion, or correlation. By default, it returns the fitted values for the outcome part of the model.
 #'
-#' @param object An object of class `heckmange`. This object should contain the fitted values for different parts of the model.
+#' @param object An object of class `heckmanGE`. This object should contain the fitted values for different parts of the model.
 #' @param part A character vector specifying which part of the model to return the fitted values for. Options are "selection", "outcome" (default), "dispersion", or "correlation". If multiple parts are provided, only the "outcome" part will be returned.
 #' @param \dots Additional arguments passed to or from other methods. These are not used in this method but must be included to match the generic method signature.
 #'
-#' @return A vector of fitted values corresponding to the specified part of the `heckmange` model. The type of the returned values depends on the part specified.
+#' @return A vector of fitted values corresponding to the specified part of the `heckmanGE` model. The type of the returned values depends on the part specified.
 #'
 #' @details
 #' - If `part` is "selection", the function returns the fitted values from the selection part of the model.
@@ -19,7 +19,7 @@
 #'
 #' @importFrom stats fitted
 #' @export
-fitted.heckmange = function(object,
+fitted.heckmanGE = function(object,
                                 part = c("selection", "outcome", "dispersion", "correlation"), ...){
 
         if(!all(part %in% c("selection", "outcome", "dispersion", "correlation"))) {
