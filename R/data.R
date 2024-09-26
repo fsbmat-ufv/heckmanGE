@@ -51,6 +51,63 @@ NULL
 #' outcomeEq <- lnambx ~ age + female + educ + blhisp + totchr + ins
 "MEPS2001"
 
+#' PNAD Continua de 2024, 2 trimestre
+#'
+#' The Continuous National Household Sample Survey (PNAD Continua)
+#' for the second quarter of 2024 is an important source of
+#' statistical data in Brazil, conducted by the Brazilian Institute
+#' of Geography and Statistics (IBGE). The survey aims to provide
+#' up-to-date information on the socioeconomic characteristics of
+#' the Brazilian population, covering topics such as employment,
+#' income, education, and other crucial aspects for the formulation
+#' of public policies and economic and social studies.
+#'
+#' @format A data frame with 326018 observations on the following variables:
+#' \itemize{
+#'   \item{year: Year of survey (numeric)}
+#'   \item{quarter: Quarter of the year (numeric)}
+#'   \item{state: Brazilian state of residence (factor)}
+#'   \item{PSU: Primary Sampling Unit identifier (factor)}
+#'   \item{statum: Status of the individual in the household (factor)}
+#'   \item{weight: Survey weight (numeric)}
+#'   \item{gender: Gender of the respondent (factor)}
+#'   \item{race: Self-identified race or ethnicity (factor)}
+#'   \item{age: Age of the respondent (numeric)}
+#'   \item{hholdRole: Role of the respondent in the household (factor)}
+#'   \item{schooling: Highest level of education attained (factor)}
+#'   \item{participation: Labor force participation status (factor)}
+#'   \item{classWorker: Classification of work situation (factor)}
+#'   \item{salary: Monthly salary of the respondent (numeric)}
+#'   \item{hoursWeek: Number of hours worked per week (numeric)}
+#'   \item{male: Male indicator (binary)}
+#'   \item{white: White indicator (binary)}
+#'   \item{hhold_head: Household head indicator (binary)}
+#'   \item{hhold_spouse: Spouse of household head indicator (binary)}
+#'   \item{yearsSchooling: Total years of schooling completed (numeric)}
+#'   \item{classWorker_employer: Employer indicator (binary)}
+#'   \item{classWorker_selfEmployed: Self-employed indicator (binary)}
+#'   \item{ln_salary: Natural logarithm of salary (numeric)}
+#'   \item{missing: Missing data indicator (binary)}
+#' }
+#'
+#' @examples
+#' data(pnadC_y2024q2)
+#' attach(pnadC_y2024q2)
+#' selectEq  <- participation ~ age + I(age^2) + male + white + yearsSchooling + hhold_head + hhold_spouse
+#' outcomeEq <- ln_salary     ~ age + I(age^2) + male + white + yearsSchooling + classWorker_employer + classWorker_selfEmployed
+#' outcomeD  <-               ~ age + I(age^2) + male + white + yearsSchooling + classWorker_employer + classWorker_selfEmployed
+#' outcomeC  <- ~ male + yearsSchooling
+#' fit_heckmanGE <- heckmanGE(selection   = selectEq,
+#'                            outcome     = outcomeEq,
+#'                            dispersion  = outcomeD,
+#'                            correlation = outcomeC,
+#'                            data = pnadC_y2024q2,
+#'                            weights = weight,
+#'                            cluster = ~PSU)
+#'                            summary(fit_heckmanGE)
+"pnadC_y2024q2"
+
+
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage("If you have questions, suggestions, or comments regarding the 'heckmanGE' package, please contact Fernando de Souza Bastos at fernando.bastos@ufv.br.")
 }
