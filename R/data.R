@@ -93,9 +93,15 @@ NULL
 #' @examples
 #' data(pnadC_y2024q2)
 #' attach(pnadC_y2024q2)
-#' selectEq  <- participation ~ age + I(age^2) + male + white + yearsSchooling + hhold_head + hhold_spouse
-#' outcomeEq <- ln_salary     ~ age + I(age^2) + male + white + yearsSchooling + classWorker_employer + classWorker_selfEmployed
-#' outcomeD  <-               ~ age + I(age^2) + male + white + yearsSchooling + classWorker_employer + classWorker_selfEmployed
+#'selectEq  <- participation ~ age + I(age^2) +
+#'  male + white + yearsSchooling +
+#'  hhold_head + hhold_spouse
+#'outcomeEq <- ln_salary ~ age + I(age^2) +
+#'  male + white + yearsSchooling +
+#'  classWorker_employer + classWorker_selfEmployed
+#'outcomeD  <- ~ age + I(age^2) +
+#'  male + white + yearsSchooling +
+#'  classWorker_employer + classWorker_selfEmployed
 #' outcomeC  <- ~ male + yearsSchooling
 #' fit_heckmanGE <- heckmanGE(selection   = selectEq,
 #'                            outcome     = outcomeEq,
