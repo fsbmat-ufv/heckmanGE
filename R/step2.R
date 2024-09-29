@@ -31,7 +31,7 @@
 #' @seealso
 #' \code{\link[sandwich]{vcovHC}} for computing robust standard errors.
 #'
-#' @importFrom stats glm.fit dnorm pnorm
+#' @importFrom stats dnorm pnorm
 #'
 #' @export
 step2 <- function(YS, XS, YO, XO, Msigma, Mrho, w) {
@@ -41,7 +41,7 @@ step2 <- function(YS, XS, YO, XO, Msigma, Mrho, w) {
         w1 = w[YS == 1]
         C_Cdqrls <- getNativeSymbolInfo("Cdqrls", PACKAGE = getLoadedDLLs()$stats)
         # Selection equation
-        fit1 = glm.fit(y = YS, x = XS, weights = w, family = binomial(link = "probit"))
+        fit1 = glm2::glm.fit2(y = YS, x = XS, weights = w, family = binomial(link = "probit"))
         IMR  <- dnorm(fit1$linear.predictors)/pnorm(fit1$linear.predictors)
         xMat <- cbind(XO, IMR)
         guess_coef_selection = coef(fit1)

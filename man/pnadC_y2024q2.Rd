@@ -7,21 +7,10 @@
 \format{
 A data frame with 326018 observations on the following variables:
 \itemize{
-\item{year: Year of survey (numeric)}
-\item{quarter: Quarter of the year (numeric)}
-\item{state: Brazilian state of residence (factor)}
 \item{PSU: Primary Sampling Unit identifier (factor)}
-\item{statum: Status of the individual in the household (factor)}
 \item{weight: Survey weight (numeric)}
-\item{gender: Gender of the respondent (factor)}
-\item{race: Self-identified race or ethnicity (factor)}
 \item{age: Age of the respondent (numeric)}
-\item{hholdRole: Role of the respondent in the household (factor)}
-\item{schooling: Highest level of education attained (factor)}
 \item{participation: Labor force participation status (factor)}
-\item{classWorker: Classification of work situation (factor)}
-\item{salary: Monthly salary of the respondent (numeric)}
-\item{hoursWeek: Number of hours worked per week (numeric)}
 \item{male: Male indicator (binary)}
 \item{white: White indicator (binary)}
 \item{hhold_head: Household head indicator (binary)}
@@ -30,7 +19,6 @@ A data frame with 326018 observations on the following variables:
 \item{classWorker_employer: Employer indicator (binary)}
 \item{classWorker_selfEmployed: Self-employed indicator (binary)}
 \item{ln_salary: Natural logarithm of salary (numeric)}
-\item{missing: Missing data indicator (binary)}
 }
 }
 \usage{
@@ -48,6 +36,7 @@ of public policies and economic and social studies.
 }
 \examples{
 data(pnadC_y2024q2)
+pnadC_y2024q2 <- pnadC_y2024q2[1:10000,]
 attach(pnadC_y2024q2)
 selectEq  <- participation ~ age + I(age^2) +
  male + white + yearsSchooling +

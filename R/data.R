@@ -64,21 +64,11 @@ NULL
 #'
 #' @format A data frame with 326018 observations on the following variables:
 #' \itemize{
-#'   \item{year: Year of survey (numeric)}
-#'   \item{quarter: Quarter of the year (numeric)}
-#'   \item{state: Brazilian state of residence (factor)}
+
 #'   \item{PSU: Primary Sampling Unit identifier (factor)}
-#'   \item{statum: Status of the individual in the household (factor)}
 #'   \item{weight: Survey weight (numeric)}
-#'   \item{gender: Gender of the respondent (factor)}
-#'   \item{race: Self-identified race or ethnicity (factor)}
 #'   \item{age: Age of the respondent (numeric)}
-#'   \item{hholdRole: Role of the respondent in the household (factor)}
-#'   \item{schooling: Highest level of education attained (factor)}
 #'   \item{participation: Labor force participation status (factor)}
-#'   \item{classWorker: Classification of work situation (factor)}
-#'   \item{salary: Monthly salary of the respondent (numeric)}
-#'   \item{hoursWeek: Number of hours worked per week (numeric)}
 #'   \item{male: Male indicator (binary)}
 #'   \item{white: White indicator (binary)}
 #'   \item{hhold_head: Household head indicator (binary)}
@@ -87,11 +77,11 @@ NULL
 #'   \item{classWorker_employer: Employer indicator (binary)}
 #'   \item{classWorker_selfEmployed: Self-employed indicator (binary)}
 #'   \item{ln_salary: Natural logarithm of salary (numeric)}
-#'   \item{missing: Missing data indicator (binary)}
 #' }
 #'
 #' @examples
 #' data(pnadC_y2024q2)
+#' pnadC_y2024q2 <- pnadC_y2024q2[1:10000,]
 #' attach(pnadC_y2024q2)
 #'selectEq  <- participation ~ age + I(age^2) +
 #'  male + white + yearsSchooling +
@@ -112,6 +102,38 @@ NULL
 #'                            cluster = ~PSU)
 #'                            summary(fit_heckmanGE)
 "pnadC_y2024q2"
+
+#' Simulation dataset for the heckmanGE example
+#'
+#' This dataset contains simulated data used to illustrate the functionality
+#' of the heckmanGE model. The data includes variables used in selection, outcome,
+#' dispersion, and correlation equations.
+#'
+#' @format A data frame with 10,000 observations on the following variables:
+#' \itemize{
+#'   \item{y_o: Outcome variable from the simulated model (numeric)}
+#'   \item{y_s: Selection indicator, 1 if selected, 0 otherwise (binary)}
+#'   \item{prob_s: Probability of selection (numeric)}
+#'   \item{x1: Simulated predictor from a normal distribution (numeric)}
+#'   \item{x2: Simulated predictor from a Poisson distribution (numeric)}
+#'   \item{x3: Simulated binary predictor (binary)}
+#'   \item{x4: Simulated predictor from a normal distribution with mean 2 and sd 2 (numeric)}
+#'   \item{x5: Simulated predictor from a Poisson distribution with lambda 1.5 (numeric)}
+#' }
+#'
+#' @examples
+#' data(simulation)
+#' selectEq  <- y_s ~ x1 + x2 + x4
+#' outcomeEq <- y_o ~ x1 + x2 + x3
+#' outcomeD  <- ~ x1 + x5
+#' outcomeC  <- ~ x3 + x4
+#' fit_heckmanGE <- heckmanGE(selection   = selectEq,
+#'                            outcome     = outcomeEq,
+#'                            dispersion  = outcomeD,
+#'                            correlation = outcomeC,
+#'                            data = simulation)
+#' summary(fit_heckmanGE)
+"simulation"
 
 
 .onAttach <- function(libname, pkgname) {
