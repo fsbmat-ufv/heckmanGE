@@ -36,7 +36,6 @@ of public policies and economic and social studies.
 }
 \examples{
 data(pnadC_y2024q2)
-pnadC_y2024q2 <- pnadC_y2024q2[1:10000,]
 attach(pnadC_y2024q2)
 selectEq  <- participation ~ age + I(age^2) +
  male + white + yearsSchooling +

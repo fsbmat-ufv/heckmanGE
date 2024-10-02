@@ -1,0 +1,47 @@
+---
+output: github_document
+bibliography: "inst/REFERENCES.bib"
+biblio-style: "apalike"
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# heckmanGE <a href='https://fsbmat-ufv.github.io/heckmanGE/'><img src='man/figures/logo.png' align="right" height="80" style="margin:10px;" /></a>
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# heckmanGE
+
+<!-- badges: start -->
+<!-- badges: end -->
+<p style="text-align: justify;">
+The heckmanGE package has functions for modeling data with selection bias problems. It includes the generalized Heckman model, introduced by @bastosBarreto, which allows the inclusion of covariates to the dispersion and correlation parameters, allowing the sample selection bias and the dispersion parameters to depend on covariates. More than that, our package allows the inclusion of sample weights and the grouping of data into clusters, in such a way that between clusters the errors are independent, but correlated within each cluster. The package also allows the adjustment of the classical Heckman model (@heckman1976common, @heckman1979sample) and the estimation of the parameters of this model via the maximum likelihood method and the two-step method.
+</p>
+
+## Installation
+
+You can install the released version of heckmanGE from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("heckmanGE")
+```
+
+And the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("fsbmat-ufv/heckmanGE")
+```
+## Code of Conduct
+
+`{heckmanGE}` is released with a [Contributor Code of
+Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+
+## References

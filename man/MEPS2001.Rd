@@ -32,19 +32,29 @@ A data frame with 3328 observations on the following variables:
 }
 }
 \source{
-2001 Medical Expenditure Panel Survey by the Agency for Healthcare Research and Quality.
+2001 Medical Expenditure Panel Survey by the Agency for Healthcare
+Research and Quality.
 }
 \usage{
 MEPS2001
 }
 \description{
-The MEPS dataset contains large-scale survey data from the United States, focusing on health services usage, costs, and insurance coverage. This dataset is restricted to individuals aged 21 to 64 years. It includes outpatient cost data with some zero expenditure values for model adjustment.
+The MEPS dataset contains large-scale survey data from the United States,
+focusing on health services usage, costs, and insurance coverage. This dataset
+is restricted to individuals aged 21 to 64 years. It includes outpatient cost
+data with some zero expenditure values for model adjustment.
 }
 \examples{
 data(MEPS2001)
-attach(MEPS2001)
-hist(lnambx)
-selectEq <- dambexp ~ age + female + educ + blhisp + totchr + ins + income
+selectEq  <- dambexp ~ age + female + educ + blhisp + totchr + ins + income
 outcomeEq <- lnambx ~ age + female + educ + blhisp + totchr + ins
+dispersion  <- ~ age + female + totchr + ins
+correlation  <- ~ age
+fit <- heckmanGE(selection = selectEq,
+                outcome = outcomeEq,
+                dispersion = dispersion,
+                correlation = correlation,
+                data = MEPS2001)
+summary(fit)
 }
 \keyword{datasets}

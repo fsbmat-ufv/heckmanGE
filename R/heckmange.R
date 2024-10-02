@@ -237,32 +237,3 @@ heckmanGE <- function(selection, outcome, dispersion, correlation,
 
   result
 }
-
-
-
-
-
-
-
-#data(MEPS2001)
-#d = rbind(MEPS2001, MEPS2001, MEPS2001, MEPS2001, MEPS2001, MEPS2001)
-#
-#selectEq  <- dambexp ~ age + female + educ + blhisp + totchr + ins + income
-#outcomeEq <- lnambx ~ age + female + educ + blhisp + totchr + ins
-#dispersion  <- ~ age + female + totchr + ins
-#correlation  <- ~ age + totchr
-#start = NULL
-#
-#heckmanGE <- function(selection, outcome, dispersion, correlation, data, weights, cluster, start = NULL) {
-#
-#        ##############################################################################
-#        mf <- match.call(expand.dots = FALSE)
-#        mf
-#}
-#
-#mf = heckmanGE(selectEq, outcomeEq, dispersion, correlation, cluster = subject.id, data = MEPS2001)
-#object = heckmanGE(selection = selectEq,
-#              outcome   = outcomeEq,
-#              dispersion  = dispersion,
-#              correlation  = correlation,
-#              data = MEPS2001)

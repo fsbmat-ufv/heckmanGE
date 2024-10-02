@@ -1,8 +1,14 @@
 #' heckmanGE: A Package for Fitting Sample Selection Models
 #'
-#' This package provides functions for fitting sample selection models, specifically the Heckman-Ge model. It includes functionality for specifying selection and outcome equations, as well as adjusting parameters for dispersion and correlation.
+#' This package provides functions for fitting sample selection models,
+#' specifically the Heckman-Ge model. It includes functionality for specifying
+#' selection and outcome equations, as well as adjusting parameters for dispersion
+#' and correlation.
 #'
-#' @return A list of results from the fitted model, including parameter estimates, the Hessian matrix, number of observations, and other relevant statistics. If initial values are not provided, the function estimates them using the Heckman two-step method.
+#' @return A list of results from the fitted model, including parameter estimates,
+#' the Hessian matrix, number of observations, and other relevant statistics. If
+#' initial values are not provided, the function estimates them using the Heckman
+#' two-step method.
 #'
 #' @author Fernando de Souza Bastos
 #'
@@ -13,7 +19,10 @@ NULL
 
 #' Medical Expenditure Panel Survey (MEPS) Data
 #'
-#' The MEPS dataset contains large-scale survey data from the United States, focusing on health services usage, costs, and insurance coverage. This dataset is restricted to individuals aged 21 to 64 years. It includes outpatient cost data with some zero expenditure values for model adjustment.
+#' The MEPS dataset contains large-scale survey data from the United States,
+#' focusing on health services usage, costs, and insurance coverage. This dataset
+#' is restricted to individuals aged 21 to 64 years. It includes outpatient cost
+#' data with some zero expenditure values for model adjustment.
 #'
 #' @format A data frame with 3328 observations on the following variables:
 #' \itemize{
@@ -41,14 +50,21 @@ NULL
 #'   \item{ins: Insurance status (binary)}
 #' }
 #'
-#' @source 2001 Medical Expenditure Panel Survey by the Agency for Healthcare Research and Quality.
+#' @source 2001 Medical Expenditure Panel Survey by the Agency for Healthcare
+#' Research and Quality.
 #'
 #' @examples
-#' data(MEPS2001)
-#' attach(MEPS2001)
-#' hist(lnambx)
-#' selectEq <- dambexp ~ age + female + educ + blhisp + totchr + ins + income
-#' outcomeEq <- lnambx ~ age + female + educ + blhisp + totchr + ins
+#'data(MEPS2001)
+#'selectEq  <- dambexp ~ age + female + educ + blhisp + totchr + ins + income
+#'outcomeEq <- lnambx ~ age + female + educ + blhisp + totchr + ins
+#'dispersion  <- ~ age + female + totchr + ins
+#'correlation  <- ~ age
+#'fit <- heckmanGE(selection = selectEq,
+#'                 outcome = outcomeEq,
+#'                 dispersion = dispersion,
+#'                 correlation = correlation,
+#'                 data = MEPS2001)
+#'summary(fit)
 "MEPS2001"
 
 #' PNAD Continua de 2024, 2 trimestre
@@ -81,7 +97,6 @@ NULL
 #'
 #' @examples
 #' data(pnadC_y2024q2)
-#' pnadC_y2024q2 <- pnadC_y2024q2[1:10000,]
 #' attach(pnadC_y2024q2)
 #'selectEq  <- participation ~ age + I(age^2) +
 #'  male + white + yearsSchooling +
