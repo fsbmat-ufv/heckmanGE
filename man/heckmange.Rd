@@ -104,6 +104,6 @@ or clustered data. For more details, see the documentation for
 \author{
 Fernando de Souza Bastos
 }
-\keyword{Heckman,}
+\keyword{Heckman}
 \keyword{Sample}
 \keyword{Selection}

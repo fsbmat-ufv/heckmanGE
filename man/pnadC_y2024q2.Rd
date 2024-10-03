@@ -35,6 +35,7 @@ income, education, and other crucial aspects for the formulation
 of public policies and economic and social studies.
 }
 \examples{
+\donttest{
 data(pnadC_y2024q2)
 attach(pnadC_y2024q2)
 selectEq  <- participation ~ age + I(age^2) +
@@ -54,6 +55,6 @@ fit_heckmanGE <- heckmanGE(selection   = selectEq,
                            data = pnadC_y2024q2,
                            weights = weight,
                            cluster = ~PSU)
-                           summary(fit_heckmanGE)
+                           summary(fit_heckmanGE)}
 }
 \keyword{datasets}

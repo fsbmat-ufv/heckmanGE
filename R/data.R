@@ -12,7 +12,7 @@
 #'
 #' @author Fernando de Souza Bastos
 #'
-#' @keywords Heckman, Sample Selection
+#' @keywords Heckman Sample Selection
 #'
 #' @name heckmanGE
 NULL
@@ -96,6 +96,7 @@ NULL
 #' }
 #'
 #' @examples
+#' \donttest{
 #' data(pnadC_y2024q2)
 #' attach(pnadC_y2024q2)
 #'selectEq  <- participation ~ age + I(age^2) +
@@ -115,7 +116,7 @@ NULL
 #'                            data = pnadC_y2024q2,
 #'                            weights = weight,
 #'                            cluster = ~PSU)
-#'                            summary(fit_heckmanGE)
+#'                            summary(fit_heckmanGE)}
 "pnadC_y2024q2"
 
 #' Simulation dataset for the heckmanGE example

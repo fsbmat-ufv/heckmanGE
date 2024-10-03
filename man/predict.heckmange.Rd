@@ -7,15 +7,18 @@ Predictions from the Generalized Heckman Model}
 \usage{
 \method{predict}{heckmanGE}(
   object,
+  ...,
   part = c("selection", "outcome", "dispersion", "correlation"),
   newdata = NULL,
   type = c("link", "response"),
-  cofint = F,
+  cofint = FALSE,
   confidence_level = 0.95
 )
 }
 \arguments{
 \item{object}{An object of class \code{heckmanGE}. This object should be a fitted model from which predictions will be made.}
+
+\item{\dots}{Argumentos adicionais passados para métodos específicos. Este argumento é mantido para compatibilidade com a função genérica \code{predict}.}
 
 \item{part}{A character vector specifying the model part for which to make predictions. Options include "selection", "outcome", "dispersion", and "correlation". The default is "outcome". If multiple parts are specified, only the "outcome" part will be used.}
 

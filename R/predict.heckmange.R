@@ -4,6 +4,7 @@
 #' Generates predictions from a fitted `heckmanGE` model. Predictions can be made on the scale of the linear predictors or on the scale of the response variable. The function can also return confidence intervals for the predictions if requested.
 #'
 #' @param object An object of class `heckmanGE`. This object should be a fitted model from which predictions will be made.
+#' @param \dots Argumentos adicionais passados para métodos específicos. Este argumento é mantido para compatibilidade com a função genérica \code{predict}.
 #' @param part A character vector specifying the model part for which to make predictions. Options include "selection", "outcome", "dispersion", and "correlation". The default is "outcome". If multiple parts are specified, only the "outcome" part will be used.
 #' @param newdata Optionally, a data frame containing new data for making predictions. If omitted, the function uses the fitted linear predictors from the model object.
 #' @param type The type of prediction required. The default is "link", which returns predictions on the scale of the linear predictors. If "response" is specified, predictions are returned on the scale of the response variable after applying the inverse link function.
@@ -22,12 +23,13 @@
 #' @importFrom utils head
 #' @importFrom vctrs vec_size
 #' @export
-predict.heckmanGE = function(object,
+predict.heckmanGE = function(object, ...,
                                  part = c("selection", "outcome", "dispersion", "correlation"),
                                  newdata = NULL,
                                  type    = c("link", "response"),
-                                 cofint = F,
-                                 confidence_level = .95){
+                                 cofint = FALSE,
+                                 confidence_level = 0.95){
+
 
         if(!all(part %in% c("selection", "outcome", "dispersion", "correlation"))) {
                 stop("part must be 'selection', 'outcome', 'dispersion', or 'correlation'")
@@ -92,7 +94,7 @@ predict.heckmanGE = function(object,
         }
 
 
-        if(cofint == T){
+        if(cofint == TRUE){
                 Sigma = vcov.heckmanGE(object, part)
 
                 se = as.numeric(sapply(1:nrow(X), \(i){
