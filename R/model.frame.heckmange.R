@@ -15,9 +15,11 @@
 #' - If the `part` argument is not specified correctly or includes multiple parts, the function defaults to returning the model frame for the "outcome" part.
 #'
 #' @export
-model.frame.heckmanGE = function(formula,
-                                 part = c("selection", "outcome", "dispersion", "correlation"),
-                                 ...){
+model.frame.heckmanGE <- function(formula,
+                                  part = c("selection", "outcome", "dispersion", "correlation"),
+                                  ...) {
+  # Renomear 'formula' para 'object' internamente
+  object <- formula
 
   if(!all(part %in% c("selection", "outcome", "dispersion", "correlation"))) {
     stop("part must be 'selection', 'outcome', 'dispersion', or 'correlation'")
@@ -27,5 +29,9 @@ model.frame.heckmanGE = function(formula,
     part = 'outcome'
   }
 
-  formula$model.frames[[paste0("model.frame.",part)]]
+  # Validar 'part'
+  part <- match.arg(part)
+
+  # Retornar o frame do modelo
+  object$model.frames[[paste0("model.frame.", part)]]
 }

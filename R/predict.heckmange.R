@@ -4,133 +4,78 @@
 #' Generates predictions from a fitted `heckmanGE` model. Predictions can be made on the scale of the linear predictors or on the scale of the response variable. The function can also return confidence intervals for the predictions if requested.
 #'
 #' @param object An object of class `heckmanGE`. This object should be a fitted model from which predictions will be made.
-#' @param \dots Argumentos adicionais passados para métodos específicos. Este argumento é mantido para compatibilidade com a função genérica \code{predict}.
-#' @param part A character vector specifying the model part for which to make predictions. Options include "selection", "outcome", "dispersion", and "correlation". The default is "outcome". If multiple parts are specified, only the "outcome" part will be used.
+#' @param \dots Additional arguments passed to specific methods. These are kept for compatibility with the generic `predict` function.
+#' @param part A character vector specifying the model part for which to make predictions. Options include "selection", "outcome", "dispersion", and "correlation". Default is "outcome".
 #' @param newdata Optionally, a data frame containing new data for making predictions. If omitted, the function uses the fitted linear predictors from the model object.
-#' @param type The type of prediction required. The default is "link", which returns predictions on the scale of the linear predictors. If "response" is specified, predictions are returned on the scale of the response variable after applying the inverse link function.
+#' @param type The type of prediction required. Default is "link", which returns predictions on the scale of the linear predictors. If "response" is specified, predictions are on the scale of the response variable.
 #' @param cofint A logical indicating whether to return confidence intervals for the predictions. Default is FALSE.
 #' @param confidence_level A numeric value specifying the confidence level for the confidence intervals if `cofint` is TRUE. Default is 0.95.
-#' @return
-#' A vector or matrix of predictions from the `heckmanGE` object, depending on the value of `cofint`. If `cofint` is TRUE, the function returns a matrix with the mean predicted value, and the lower and upper bounds of the confidence interval.
-#'
-#' @details
-#' - The function first checks the validity of the `part` and `type` arguments.
-#' - If `newdata` is provided, the function ensures it matches the variables and structure of the original model frame.
-#' - Predictions can be on the link scale or the response scale, depending on the `type` argument.
-#' - Confidence intervals are calculated if `cofint` is TRUE, using the standard errors derived from the model.
-#'
-#' @importFrom stats model.frame pnorm qnorm
-#' @importFrom utils head
-#' @importFrom vctrs vec_size
+#' @return A vector or matrix of predictions. If `cofint` is TRUE, returns a matrix with predicted values and confidence intervals.
+#' @importFrom stats qnorm
 #' @export
 predict.heckmanGE = function(object, ...,
-                                 part = c("selection", "outcome", "dispersion", "correlation"),
-                                 newdata = NULL,
-                                 type    = c("link", "response"),
-                                 cofint = FALSE,
-                                 confidence_level = 0.95){
+                             part = c("selection", "outcome", "dispersion", "correlation"),
+                             newdata = NULL,
+                             type    = c("link", "response"),
+                             cofint = FALSE,
+                             confidence_level = 0.95) {
 
+  # Validar argumentos
+  part <- match.arg(part)
+  type <- match.arg(type)
 
-        if(!all(part %in% c("selection", "outcome", "dispersion", "correlation"))) {
-                stop("part must be 'selection', 'outcome', 'dispersion', or 'correlation'")
-        }
+  # Inicializar variável para predições
+  predicted <- NULL
 
-        if(length(part) > 1) {
-                part = 'outcome'
-        }
+  # Se `newdata` não for fornecido, usar predições ajustadas
+  if (is.null(newdata)) {
+    if (!is.null(object$linear.prediction[[paste0("pred.", part)]])) {
+      predicted <- object$linear.prediction[[paste0("pred.", part)]]
+    } else {
+      stop(paste("No fitted predictions found for part:", part))
+    }
+  } else {
+    # Processar `newdata` para calcular predições
+    tryCatch({
+      original_model.frame <- model.frame.heckmanGE(object, part = part)
+      terms_obj <- terms(original_model.frame)
+      X <- model.matrix(terms_obj, newdata)
+    }, error = function(e) {
+      stop("Error in processing `newdata`. Ensure it matches the structure of the original model frame.")
+    })
 
-        if(!all(type %in% c("link", "response"))) {
-                stop("type must be 'link' or 'response'")
-        }
+    # Garantir que coeficientes existam
+    coef <- coef.heckmanGE(object = object, part = part)
+    if (is.null(coef)) {
+      stop("Coefficients not found for the specified model part.")
+    }
 
-        if(length(type) > 1) {
-                type = 'link'
-        }
+    # Calcular predições
+    predicted <- as.numeric(X %*% coef)
+  }
 
-        if(is.null(newdata)){
+  # Adicionar intervalos de confiança, se necessário
+  if (cofint) {
+    Sigma <- vcov.heckmanGE(object, part)
+    se <- sqrt(rowSums((X %*% Sigma) * X))
+    z <- qnorm(1 - (1 - confidence_level) / 2)
+    predicted <- cbind(
+      predicted = predicted,
+      lower = predicted - z * se,
+      upper = predicted + z * se
+    )
+  }
 
-                fitted = object$linear.prediction[[paste0("pred.",part)]]
+  # Transformar predições para escala da resposta
+  if (type == "response") {
+    transform_fn <- switch(part,
+                           selection = pnorm,
+                           dispersion = exp,
+                           correlation = tanh,
+                           outcome = identity
+    )
+    predicted <- transform_fn(predicted)
+  }
 
-        }else{
-
-                mf = object$call
-                m <- match(part, names(mf), 0)
-                expr = parse(text = paste0("stats::model.frame(formula = ", as.character(mf[m]),", data = newdata, drop.unused.levels = TRUE, na.action = na.pass)"))
-
-                # model.frame requires the parameter to be formula
-                newdata_model.frame  <- eval(expr) #, envir = parent.frame())
-                original_model.frame <- model.frame.heckmanGE(object = object, part = part)
-
-                original_model.frame$`(weights)` <- NULL
-
-                if(!all(names(original_model.frame) %in% names(newdata_model.frame))){
-                        stop(paste("newdata should have the same variables as the original model frame for the",part,"model"))
-                }else{
-                        newdata_model.frame <- newdata_model.frame[, names(newdata_model.frame) %in% names(original_model.frame)]
-                }
-
-
-                if(!length(newdata_model.frame) == length(original_model.frame)){
-                        stop(paste("newdata should have the same number of variables as the original model frame for the",part,"model"))
-                }
-
-
-                newdata_model.frame <- newdata_model.frame[, names(original_model.frame)]
-
-                for(i in 1:ncol(newdata_model.frame)){
-                        if("factor" %in% class(original_model.frame[[i]])){
-                                newdata_model.frame[[i]]         = factor(newdata_model.frame[[i]])
-                                class(newdata_model.frame[[i]])  = class(original_model.frame[[i]])
-                                levels(newdata_model.frame[[i]]) = levels(original_model.frame[[i]])
-                        }
-                }
-
-                X <- model.matrix(terms(original_model.frame), newdata_model.frame)
-
-                coef = coef.heckmanGE(object = object, part = part)
-
-                predicted = as.numeric(X %*% coef)
-
-        }
-
-
-        if(cofint == TRUE){
-                Sigma = vcov.heckmanGE(object, part)
-
-                se = as.numeric(sapply(1:nrow(X), \(i){
-                        sqrt(X[i, ] %*% Sigma %*% X[i, ])
-                }))
-
-                z = abs(qnorm((1 - confidence_level)/2))
-
-                upper = predicted + z*se
-                lower = predicted - z*se
-
-                predicted = cbind(predicted = predicted,
-                                  lower     = lower,
-                                  upper     = upper)
-        }
-
-
-        if(type == "response"){
-
-                if(part == "selection"){
-                        predicted = pnorm(predicted)
-                }
-
-                if(part == "outcome"){
-                        predicted = predicted
-                }
-
-                if(part == "dispersion"){
-                        predicted = exp(predicted)
-                }
-
-                if(part == "correlation"){
-                        predicted = tanh(predicted)
-                }
-
-        }
-
-        return(predicted)
+  return(predicted)
 }

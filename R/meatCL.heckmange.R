@@ -12,7 +12,7 @@
 #'
 #' @return A matrix representing the meat component of the robust covariance matrix estimator for the Heckman-Ge model.
 #'
-#' @importFrom stats expand.model.frame model.matrix model.response model.weights na.pass hatvalues weights coef binomial pnorm dnorm glm.fit
+#' @importFrom stats model.frame expand.model.frame model.matrix model.response model.weights na.pass hatvalues weights coef binomial pnorm dnorm glm.fit
 #' @importFrom utils tail combn
 #' @export
 meatCL.heckmanGE = function(x, cluster = NULL, type = NULL, cadjust = TRUE, multi0 = FALSE, ...) {
